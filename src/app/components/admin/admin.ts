@@ -10,6 +10,7 @@ import { MetodoPagoEventoService } from '../../../services/metodo-pago-evento.se
 import { FechaeventoService } from '../../../services/fechaevento.service';
 import { forkJoin, of, map, catchError, Observable } from 'rxjs';
 import { EstudianteUpeuService } from '../../../services/estudiante-upeu.service';
+
 import { UsuariosService, UsuarioDTO } from '../../../services/usuarios.service';
 import { AuthService } from '../../../services/auth.service';
 
@@ -84,6 +85,7 @@ export class Admin implements OnInit {
     private metodoPagoEventoService: MetodoPagoEventoService,
     private fechaeventoService: FechaeventoService,
     private estudianteService: EstudianteUpeuService,
+
     private usuariosService: UsuariosService,
     private authService: AuthService
   ) {}
@@ -519,13 +521,16 @@ export class Admin implements OnInit {
 
   loadAllStudentCodesForBulk(): void {
     this.loadingCodes = true;
-    this.estudianteService.getAll().subscribe({
+
+    this.usuariosService.getEstudiantes().subscribe({
       next: (items) => {
         const codes = (items || [])
-          .map((e) => String(e.codigoEstudiante || ''))
-          .filter((v) => v && /^\d{7,8}$/.test(v));
-        const unique = Array.from(new Set(codes));
-        this.bulkCodesText = unique.join('\n');
+
+          .map((u) => String(u.codigoEstudiante || '').trim())
+          .filter((c) => c && /^\d{7,8}$/.test(c));
+
+        this.bulkCodesText = Array.from(new Set(codes)).join('\n');
+
         this.computeBulkStats();
         this.loadingCodes = false;
       },
@@ -547,9 +552,10 @@ export class Admin implements OnInit {
   }
 
   attendanceForEvent: any[] = [];
-  attendanceMode: 'qr' | 'manual' = 'qr';
+
   qrInput: string = '';
   attendanceSearch: string = '';
+
   recentAttendance: { codigoEstudiante: string; nombre: string; fecha: string }[] = [];
   attendanceInscritos: number = 0;
   attendanceAsistieron: number = 0;
@@ -558,6 +564,7 @@ export class Admin implements OnInit {
   openAttendance(event: any): void {
     this.selectedEventForAttendance = event;
     const idNum = Number(event.id);
+
     this.inscripcionesService.getByEventoId(idNum).subscribe({
       next: (regs) => {
         this.attendanceForEvent = regs.map((r) => ({
@@ -567,6 +574,8 @@ export class Admin implements OnInit {
             (r.nombreEstudiante || '') + (r.apellidosEstudiante ? ' ' + r.apellidosEstudiante : ''),
           asistio: (r.estado || '').toUpperCase() === 'ASISTIO',
         }));
+
+        // ⛔ NO borrar recentAttendance
         this.recomputeAttendanceStats();
       },
     });
@@ -609,46 +618,69 @@ export class Admin implements OnInit {
 
   markAttendance(item: any, value: boolean): void {
     item.asistio = value;
+    this.recomputeAttendanceStats();
   }
 
   saveAttendance(): void {
-    const idNum = Number(this.selectedEventForAttendance?.id);
     const updates = this.attendanceForEvent.map((it) =>
-      this.inscripcionesService.updateInscripcion(Number(it.id), {
-        estado: it.asistio ? 'ASISTIO' : 'CONFIRMADO',
-      })
+      this.inscripcionesService.patchEstado(it.id, it.asistio ? 'ASISTIO' : 'CONFIRMADO')
     );
+
     forkJoin(updates).subscribe({
       next: () => {
-        this.selectedEventForAttendance = null;
-        this.loadRegistrations();
+        this.showToast('Cambios guardados', 'success');
+
+        // 🔥 REGENERAR ÚLTIMAS ASISTENCIAS
+        this.recentAttendance = this.attendanceForEvent
+          .filter((a) => a.asistio) // solo los que marcaron asistencia
+          .map((a) => ({
+            codigoEstudiante: a.codigoEstudiante,
+            nombre: a.nombre,
+            fecha: new Date().toISOString(),
+          }))
+          .slice(-10); // solo los últimos 10
+
+        // 🔥 RECALCULAR MÉTRICAS
+        this.recomputeAttendanceStats();
       },
     });
   }
 
-  setAttendanceMode(mode: 'qr' | 'manual'): void {
-    this.attendanceMode = mode;
-    this.qrInput = '';
-  }
-
   registerAttendance(): void {
-    const raw = (this.qrInput || '').trim();
-    if (!raw) return;
-    const code = this.attendanceMode === 'qr' ? this.parseQrToCode(raw) : raw;
-    if (!/^\d{7,8}$/.test(code)) return;
-    const item = this.attendanceForEvent.find((x) => x.codigoEstudiante === code);
-    if (!item) return;
-    if (item.asistio) return;
-    this.inscripcionesService.updateInscripcion(Number(item.id), { estado: 'ASISTIO' }).subscribe({
+    const code = (this.qrInput || '').trim();
+
+    if (!/^\d{7,8}$/.test(code)) {
+      this.showToast('Código inválido', 'error');
+      return;
+    }
+
+    const row = this.attendanceForEvent.find((r) => r.codigoEstudiante === code);
+
+    if (!row) {
+      this.showToast('Estudiante no inscrito en este evento', 'error');
+      return;
+    }
+
+    if (row.asistio) {
+      this.showToast('El estudiante ya estaba marcado como asistido', 'info');
+      return;
+    }
+
+    this.inscripcionesService.updateInscripcion(Number(row.id), { estado: 'ASISTIO' }).subscribe({
       next: () => {
-        item.asistio = true;
+        row.asistio = true;
         this.recomputeAttendanceStats();
-        const fecha = new Date().toISOString();
-        this.recentAttendance = [
-          { codigoEstudiante: item.codigoEstudiante, nombre: item.nombre, fecha },
-          ...this.recentAttendance,
-        ].slice(0, 10);
+
+        this.recentAttendance.unshift({
+          codigoEstudiante: row.codigoEstudiante,
+          nombre: row.nombre,
+          fecha: new Date().toISOString(),
+        });
+
+        this.recentAttendance = this.recentAttendance.slice(0, 10);
         this.qrInput = '';
+
+        this.showToast('Asistencia registrada', 'success');
       },
     });
   }
@@ -666,11 +698,6 @@ export class Admin implements OnInit {
         ].slice(0, 10);
       },
     });
-  }
-
-  parseQrToCode(value: string): string {
-    const m = value.match(/\d{7,8}/);
-    return m ? m[0] : '';
   }
 
   private recomputeAttendanceStats(): void {

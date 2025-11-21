@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
@@ -23,6 +24,15 @@ export interface UsuariosStatsDTO {
   admin: number;
   coordinator: number;
   student: number;
+}
+export interface Usuario {
+  id: number;
+  email: string;
+  codigoEstudiante: string;
+  nombre: string;
+  apellidos: string;
+  rol: string;
+  activo: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -69,6 +79,12 @@ export class UsuariosService {
 
   stats(): Observable<UsuariosStatsDTO> {
     return this.http.get<UsuariosStatsDTO>(`${environment.apiUrl}/usuarios/stats`, {
+      headers: this.headers(),
+    });
+  }
+
+  getEstudiantes(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/usuarios/estudiantes`, {
       headers: this.headers(),
     });
   }
