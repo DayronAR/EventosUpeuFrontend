@@ -1,0 +1,369 @@
+<!-- src/app/components/student/student.html -->
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="border-b bg-white sticky top-0 z-10 shadow-sm">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-900">Sistema de Eventos UPEU</h2>
+            <p class="text-sm text-gray-600">Panel de Estudiante</p>
+          </div>
+        </div>
+        <button
+          (click)="logout()"
+          class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+          </svg>
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container mx-auto px-4 py-8">
+    <!-- Student Info Card -->
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
+      <div class="p-6">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900">{{ student.fullName }}</h3>
+              <p class="text-gray-600">Código: {{ student.code }}</p>
+            </div>
+          </div>
+          <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+            Estudiante
+          </span>
+        </div>
+      </div>
+      <div class="px-6 pb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <p class="text-sm text-gray-600">Facultad</p>
+            <p class="font-medium">{{ student.faculty || 'No disponible' }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Escuela</p>
+            <p class="font-medium">{{ student.school || 'No disponible' }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Ciclo</p>
+            <p class="font-medium">{{ student.cycle || 'No disponible' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="bg-gray-100 rounded-lg p-1 mb-6 inline-flex">
+      <button
+        (click)="setActiveTab('available')"
+        [class]="activeTab === 'available'
+          ? 'bg-white text-blue-600 shadow-sm'
+          : 'text-gray-600 hover:text-gray-900'"
+        class="px-4 py-2 rounded-md transition-colors font-medium"
+      >
+        Eventos Disponibles
+      </button>
+      <button
+        (click)="setActiveTab('my-events')"
+        [class]="activeTab === 'my-events'
+          ? 'bg-white text-blue-600 shadow-sm'
+          : 'text-gray-600 hover:text-gray-900'"
+        class="px-4 py-2 rounded-md transition-colors font-medium"
+      >
+        Mis Eventos ({{ myRegistrations.length }})
+      </button>
+    </div>
+
+    <!-- Available Events Tab -->
+    <div *ngIf="activeTab === 'available'" class="space-y-6">
+      <!-- Search -->
+      <div class="flex items-center gap-4">
+        <div class="relative flex-1 max-w-md">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input
+            type="text"
+            placeholder="Buscar eventos..."
+            [(ngModel)]="searchQuery"
+            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+      </div>
+
+      <!-- Events Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let event of filteredEvents" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div class="-mt-px">
+            <img [src]="event.imageUrl || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop'" alt="Imagen del evento" class="w-full h-32 object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-lg font-semibold text-gray-800">{{ event.title }}</h3>
+              <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                {{ event.type }}
+              </span>
+            </div>
+
+            <p class="text-gray-600 text-sm mb-4">{{ event.description }}</p>
+
+            <div *ngIf="getSessionsFor(event.id).length > 0" class="mb-4">
+              <p class="text-xs text-gray-500 mb-2">Sesiones programadas</p>
+              <div class="space-y-1">
+                <div *ngFor="let s of getSessionsFor(event.id); let i = index" class="text-sm text-gray-700">
+                  {{ i + 1 }}. {{ formatDate(s.startDate) }} – {{ formatDate(s.endDate) }}
+                  <span *ngIf="s.description" class="text-gray-500">· {{ s.description }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
+              <div class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                {{ formatDate(event.startDate) }}
+              </div>
+              <div class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                {{ event.location }}
+              </div>
+            </div>
+
+            <div class="text-xs text-gray-600 mb-3" *ngIf="getPaymentMethodsFor(event.id).length > 0">
+              Pagos: {{ getPaymentMethodsFor(event.id).join(', ') }}
+            </div>
+
+            <div class="flex justify-between items-center">
+              <div class="text-sm text-gray-500">
+                {{ event.registeredCount }}/{{ event.capacity }} inscritos
+                <div class="w-32 bg-gray-200 rounded-full h-2 mt-1">
+                  <div class="bg-green-600 h-2 rounded-full" [style.width.%]="(event.registeredCount / event.capacity) * 100"></div>
+                </div>
+              </div>
+
+              <div class="text-right">
+                <div *ngIf="!event.isFree" class="text-sm font-semibold text-orange-600 mb-1">
+                  S/ {{ event.price }}
+                </div>
+                <button
+                  *ngIf="!myEventIds.includes(event.id)"
+                  (click)="handleRegister(event.id)"
+                  [disabled]="event.registeredCount >= event.capacity"
+                  class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+                >
+                  {{ event.registeredCount >= event.capacity ? 'Lleno' : (event.isFree ? 'Inscribirse' : 'Pagar') }}
+                </button>
+
+                <span *ngIf="myEventIds.includes(event.id)" class="bg-green-100 text-green-800 px-3 py-1 rounded-lg text-sm">
+                  Inscrito ✅
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="filteredEvents.length === 0" class="text-center py-12 bg-white rounded-lg">
+        <p class="text-gray-500">No se encontraron eventos</p>
+      </div>
+    </div>
+
+    <!-- My Events Tab -->
+    <div *ngIf="activeTab === 'my-events'" class="space-y-6">
+      <!-- Upcoming Events -->
+      <div *ngIf="upcomingEvents.length > 0">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Próximos Eventos</h3>
+        <div class="space-y-4">
+          <div *ngFor="let event of upcomingEvents" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <img [src]="event.imageUrl || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop'" alt="Imagen del evento" class="w-full h-28 object-cover rounded-md mb-3">
+                <h4 class="text-lg font-semibold text-gray-800">{{ event.title }}</h4>
+                <p class="text-gray-600 mt-1">{{ formatDate(event.startDate) }}</p>
+                <div *ngIf="getSessionsFor(event.id).length > 0" class="mt-2">
+                  <div *ngFor="let s of getSessionsFor(event.id); let i = index" class="text-xs text-gray-600">
+                    {{ i + 1 }}. {{ formatDate(s.startDate) }} – {{ formatDate(s.endDate) }}
+                    <span *ngIf="s.description" class="text-gray-500">· {{ s.description }}</span>
+                  </div>
+                </div>
+              </div>
+              <ng-container *ngIf="getRegistrationForEvent(event.id) as registration">
+                <button
+                  (click)="handleShowQR(registration)"
+                  class="border border-gray-300 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                  </svg>
+                  Ver QR
+                </button>
+              </ng-container>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-600 mt-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <span>{{ event.location }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Past Events -->
+      <div *ngIf="pastEvents.length > 0">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Eventos Pasados</h3>
+        <div class="space-y-4">
+          <div *ngFor="let event of pastEvents" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 opacity-75">
+            <div class="flex items-start justify-between">
+              <div>
+                <img [src]="event.imageUrl || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop'" alt="Imagen del evento" class="w-full h-24 object-cover rounded-md mb-3">
+                <h4 class="text-lg font-semibold text-gray-800">{{ event.title }}</h4>
+                <p class="text-gray-600 mt-1">{{ formatDate(event.startDate) }}</p>
+                <div *ngIf="getSessionsFor(event.id).length > 0" class="mt-2">
+                  <div *ngFor="let s of getSessionsFor(event.id); let i = index" class="text-xs text-gray-600">
+                    {{ i + 1 }}. {{ formatDate(s.startDate) }} – {{ formatDate(s.endDate) }}
+                    <span *ngIf="s.description" class="text-gray-500">· {{ s.description }}</span>
+                  </div>
+                </div>
+              </div>
+              <ng-container *ngIf="getRegistrationForEvent(event.id) as registration">
+                <span *ngIf="registration.attended"
+                      class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                  Asistió
+                </span>
+                <span *ngIf="!registration.attended"
+                      class="border border-gray-300 text-gray-600 px-3 py-1 rounded-full text-sm font-medium">
+                  No asistió
+                </span>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="myRegistrations.length === 0" class="text-center py-12 bg-white rounded-lg">
+        <p class="text-gray-500">No tienes eventos registrados</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Dialog -->
+  <div *ngIf="qrDialogOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-sm w-full">
+      <div class="p-6 border-b border-gray-200">
+        <h3 class="text-xl font-semibold text-gray-800">Código QR de Registro</h3>
+        <p class="text-gray-600 text-sm mt-1">
+          Presenta este código QR para registrar tu asistencia al evento
+        </p>
+      </div>
+
+      <div *ngIf="selectedQR" class="flex flex-col items-center gap-4 py-6 px-6">
+        <div class="bg-white p-4 rounded-lg border-2 border-gray-200">
+          <img *ngIf="qrCodeDataUrl" [src]="qrCodeDataUrl" alt="QR Code" class="w-48 h-48">
+          <div *ngIf="!qrCodeDataUrl" class="w-48 h-48 flex items-center justify-center bg-gray-100">
+            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="text-center">
+          <p class="text-sm text-gray-600">Código: {{ selectedQR.qrCode }}</p>
+          <p class="text-sm text-gray-600 mt-1">
+            Registrado el: {{ formatDate(selectedQR.registeredAt) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="p-6 border-t border-gray-200">
+        <button
+          (click)="qrDialogOpen = false"
+          class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Dialog -->
+  <div *ngIf="paymentDialogOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+      <div class="p-6 border-b border-gray-200">
+        <h3 class="text-xl font-semibold text-gray-800">Proceso de Pago</h3>
+        <p class="text-gray-600 text-sm mt-1" *ngIf="selectedEventForPayment">
+          {{ selectedEventForPayment.title }}
+        </p>
+      </div>
+
+      <div class="p-6">
+        <div class="space-y-4">
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <p class="text-yellow-800 text-sm">
+              <strong>Monto a pagar:</strong> S/ {{ selectedEventForPayment?.price }}
+            </p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Método de Pago</label>
+            <select [(ngModel)]="selectedPaymentMethod" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option *ngFor="let m of getPaymentMethodsFor(selectedEventForPayment?.id || '')" [value]="m">{{ m | titlecase }}</option>
+            </select>
+          </div>
+          <p *ngIf="getPaymentMethodsFor(selectedEventForPayment?.id || '').length === 0" class="text-sm text-gray-500">Se usará método por defecto: Efectivo.</p>
+
+          <div *ngIf="selectedPaymentMethod?.toUpperCase() === 'YAPE' && yapeNumber" class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p class="text-blue-800 text-sm"><strong>Yape al número:</strong> {{ yapeNumber }}</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Número de Operación</label>
+            <input
+              [(ngModel)]="paymentReference"
+              type="text"
+              placeholder="Ingresa el número de operación"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+          </div>
+
+          <div class="flex gap-3 pt-4">
+            <button
+              type="button"
+              (click)="paymentDialogOpen = false"
+              class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              (click)="handlePaymentComplete({ method: selectedPaymentMethod || 'efectivo', reference: paymentReference || '', amount: selectedEventForPayment?.price || 0 })"
+              [disabled]="!(selectedPaymentMethod && paymentReference)"
+              class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Confirmar Pago
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

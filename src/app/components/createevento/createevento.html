@@ -1,0 +1,411 @@
+<!-- createevento.html -->
+<div *ngIf="open" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+    <!-- Header -->
+    <div class="flex justify-between items-center p-6 border-b">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900">{{ event ? 'Editar Evento' : 'Crear Nuevo Evento' }}</h2>
+        <p class="text-sm text-gray-600 mt-1">Completa la información del evento</p>
+      </div>
+      <button
+        (click)="closeDialog()"
+        class="text-gray-500 hover:text-gray-700 transition-colors"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Form Content -->
+    <div class="overflow-y-auto max-h-[calc(90vh-8rem)] p-6">
+      <form (submit)="handleSubmit($event)" class="space-y-6">
+        <!-- Título -->
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Título del Evento *</label>
+          <input
+            type="text"
+            id="title"
+            [(ngModel)]="formData.title"
+            name="title"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Ej: Seminario de Inteligencia Artificial"
+            required
+          >
+        </div>
+
+        <!-- Descripción -->
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Descripción *</label>
+          <textarea
+            id="description"
+            [(ngModel)]="formData.description"
+            name="description"
+            rows="3"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Describe el evento en detalle..."
+            required
+          ></textarea>
+        </div>
+
+        <!-- Tipo y Estado -->
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Tipo de Evento -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Evento *</label>
+            <select
+              [(ngModel)]="formData.type"
+              name="type"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option *ngFor="let type of eventTypes" [value]="type.value">{{ type.label }}</option>
+            </select>
+          </div>
+
+          <!-- Estado -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Estado *</label>
+            <select
+              [(ngModel)]="formData.status"
+              name="status"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="draft">Borrador</option>
+              <option value="published">Publicado</option>
+              <option value="ongoing">En curso</option>
+              <option value="completed">Finalizado</option>
+              <option value="cancelled">Cancelado</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Facultad y Escuela -->
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Facultad -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Facultad *</label>
+            <select
+              [(ngModel)]="selectedFaculty"
+              (ngModelChange)="handleFacultyChange($event)"
+              name="faculty"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">Selecciona una facultad</option>
+              <option *ngFor="let faculty of faculties" [value]="faculty">{{ faculty }}</option>
+            </select>
+          </div>
+
+          <!-- Escuela -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Escuela *</label>
+            <select
+              [(ngModel)]="formData.school"
+              name="school"
+              [disabled]="!selectedFaculty"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            >
+              <option value="">Selecciona una escuela</option>
+              <option *ngFor="let school of getSchoolsForFaculty()" [value]="school">{{ school }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Ciclos Objetivo -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <label class="block text-sm font-medium text-gray-700">Ciclos Objetivo *</label>
+            <div class="space-x-2">
+              <button
+                type="button"
+                (click)="selectAllCycles()"
+                class="px-3 py-1 text-xs border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Todos
+              </button>
+              <button
+                type="button"
+                (click)="clearAllCycles()"
+                class="px-3 py-1 text-xs border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Ninguno
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-5 gap-3">
+            <div *ngFor="let cycle of cycles" class="flex items-center">
+              <input
+                type="checkbox"
+                [id]="'cycle-' + cycle"
+                [checked]="formData.targetCycles.includes(cycle)"
+                (change)="handleCycleToggle(cycle)"
+                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              >
+              <label [for]="'cycle-' + cycle" class="ml-2 text-sm text-gray-700 cursor-pointer">
+                Ciclo {{ cycle }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fechas Principal -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="startDate" class="block text-sm font-medium text-gray-700 mb-2">Fecha y Hora de Inicio *</label>
+            <input
+              type="datetime-local"
+              id="startDate"
+              [(ngModel)]="formData.startDate"
+              name="startDate"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+            >
+          </div>
+          <div>
+            <label for="endDate" class="block text-sm font-medium text-gray-700 mb-2">Fecha y Hora de Fin *</label>
+            <input
+              type="datetime-local"
+              id="endDate"
+              [(ngModel)]="formData.endDate"
+              name="endDate"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+            >
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div>
+          <label for="location" class="block text-sm font-medium text-gray-700 mb-2">Ubicación Principal *</label>
+          <input
+            type="text"
+            id="location"
+            [(ngModel)]="formData.location"
+            name="location"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Ej: Auditorio Principal"
+            required
+          >
+        </div>
+
+        <!-- Fechas Adicionales -->
+        <div class="border-t pt-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-medium text-gray-900">Fechas Adicionales del Evento</h3>
+            <span class="text-sm text-gray-500">{{ eventDates.length }} fecha(s) agregada(s)</span>
+          </div>
+
+          <!-- Fechas existentes -->
+          <div *ngIf="eventDates.length > 0" class="space-y-3">
+            <div *ngFor="let date of eventDates; let i = index" class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+              <div class="flex-1">
+                <p class="text-sm text-gray-900">
+                  <strong>Sesión {{ i + 1 }}:</strong>
+                  {{ formatEventDate(date, i) }}
+                </p>
+                <p *ngIf="date.location" class="text-sm text-gray-600 mt-1">
+                  Ubicación: {{ date.location }}
+                </p>
+              </div>
+              <button
+                type="button"
+                (click)="handleRemoveEventDate(date.id)"
+                class="p-1 text-red-500 hover:text-red-700 transition-colors"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Agregar nueva fecha -->
+          <div class="p-4 bg-blue-50 rounded-lg space-y-3">
+            <p class="text-sm font-medium text-blue-900">Agregar nueva sesión del evento</p>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="new-start-date" class="block text-xs font-medium text-blue-900 mb-1">Inicio</label>
+                <input
+                  type="datetime-local"
+                  id="new-start-date"
+                  [(ngModel)]="newEventDate.startDate"
+                  name="newStartDate"
+                  class="w-full px-2 py-1 text-sm border border-blue-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+              </div>
+              <div>
+                <label for="new-end-date" class="block text-xs font-medium text-blue-900 mb-1">Fin</label>
+                <input
+                  type="datetime-local"
+                  id="new-end-date"
+                  [(ngModel)]="newEventDate.endDate"
+                  name="newEndDate"
+                  class="w-full px-2 py-1 text-sm border border-blue-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+              </div>
+            </div>
+
+            <div>
+              <label for="new-location" class="block text-xs font-medium text-blue-900 mb-1">
+                Ubicación (opcional, usa ubicación principal si está vacío)
+              </label>
+              <input
+                type="text"
+                id="new-location"
+                [(ngModel)]="newEventDate.location"
+                name="newLocation"
+                class="w-full px-2 py-1 text-sm border border-blue-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                placeholder="Ej: Laboratorio 2"
+              >
+            </div>
+
+            <button
+              type="button"
+              (click)="handleAddEventDate()"
+              class="w-full px-3 py-2 text-sm border border-blue-300 text-blue-700 rounded-md hover:bg-blue-100 transition-colors flex items-center justify-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              Agregar Fecha
+            </button>
+          </div>
+        </div>
+
+        <!-- Capacidad -->
+        <div>
+          <label for="capacity" class="block text-sm font-medium text-gray-700 mb-2">Capacidad *</label>
+          <input
+            type="number"
+            id="capacity"
+            [(ngModel)]="formData.capacity"
+            name="capacity"
+            min="1"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            required
+          >
+        </div>
+
+        <!-- Imagen -->
+        <!-- En la sección después de "Capacidad" y antes de "Configuración de Pago" -->
+        <div class="space-y-4">
+          <div>
+            <label for="imageUrl" class="block text-sm font-medium text-gray-700 mb-2">
+              Imagen del Evento
+            </label>
+            <input
+              type="text"
+              id="imageUrl"
+              [(ngModel)]="formData.imageUrl"
+              name="imageUrl"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="https://ejemplo.com/imagen.jpg"
+            >
+            <p class="text-xs text-gray-500 mt-1">
+              Ingresa la URL de una imagen para el evento
+            </p>
+          </div>
+
+          <!-- Vista previa de la imagen -->
+          <div *ngIf="formData.imageUrl" class="mt-2">
+            <p class="text-sm font-medium text-gray-700 mb-2">Vista previa:</p>
+            <div class="border rounded-lg p-2 bg-gray-50">
+              <img
+                [src]="formData.imageUrl"
+                alt="Vista previa"
+                class="max-w-full h-32 object-cover rounded mx-auto"
+                (load)="handleImageLoad()"
+                (error)="handleImageError($event)"
+                onerror="this.style.display='none'"
+              >
+              <p *ngIf="imageLoadOk === false" class="text-red-500 text-xs text-center mt-2">
+                No se puede cargar la imagen. Verifica la URL.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuración de Pago -->
+        <div class="border-t pt-6 space-y-4">
+          <h3 class="text-lg font-medium text-gray-900">Configuración de Pago</h3>
+
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="isFree"
+              [(ngModel)]="formData.isFree"
+              name="isFree"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            >
+            <label for="isFree" class="ml-2 text-sm text-gray-700 cursor-pointer">
+              Evento gratuito
+            </label>
+          </div>
+
+          <div *ngIf="!formData.isFree" class="space-y-4">
+            <!-- Precio -->
+            <div>
+              <label for="price" class="block text-sm font-medium text-gray-700 mb-2">Precio (S/.) *</label>
+              <input
+                type="number"
+                id="price"
+                [(ngModel)]="formData.price"
+                name="price"
+                min="0"
+                step="0.01"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+            </div>
+
+            <!-- Métodos de Pago -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-3">Métodos de Pago Aceptados *</label>
+              <div class="grid grid-cols-2 gap-3">
+                <div *ngFor="let method of paymentMethods" class="flex items-center">
+                  <input
+                    type="checkbox"
+                    [id]="'payment-' + method.value"
+                    [checked]="formData.acceptedPaymentMethods.includes(method.value)"
+                    (change)="handlePaymentMethodToggle(method.value)"
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  >
+                  <label [for]="'payment-' + method.value" class="ml-2 text-sm text-gray-700 cursor-pointer">
+                    {{ method.label }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex gap-3 pt-6 border-t">
+          <button
+            type="button"
+            (click)="closeDialog()"
+            class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            {{ event ? 'Guardar Cambios' : 'Crear Evento' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="fixed top-4 right-4 space-y-2 z-50">
+  <div *ngFor="let t of toasts" class="px-3 py-2 rounded shadow" [ngClass]="{
+    'bg-green-100 text-green-800': t.type === 'success',
+    'bg-red-100 text-red-800': t.type === 'error',
+    'bg-blue-100 text-blue-800': t.type === 'info'
+  }">
+    {{ t.text }}
+  </div>
+  </div>

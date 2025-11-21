@@ -1,0 +1,51 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50 flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <div class="bg-white rounded-lg shadow-lg border border-gray-200">
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-900">Crear Cuenta</h2>
+        <p class="text-gray-600 mt-2">Regístrate para acceder al sistema</p>
+      </div>
+
+      <div class="p-6">
+        <form (ngSubmit)="handleSubmit($event)" class="space-y-4">
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Nombre</label>
+            <input [(ngModel)]="nombre" name="nombre" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" required />
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Apellidos</label>
+            <input [(ngModel)]="apellidos" name="apellidos" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" required />
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Código de Estudiante</label>
+            <input [(ngModel)]="codigoEstudiante" name="codigoEstudiante" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" required />
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+            <input [(ngModel)]="email" name="email" type="email" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" required />
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input [(ngModel)]="password" name="password" type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" required />
+          </div>
+
+          <div *ngIf="error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            {{ error }}
+          </div>
+
+          <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50" [disabled]="loading">
+            {{ loading ? 'Registrando...' : 'Crear cuenta' }}
+          </button>
+
+          <div class="text-center mt-4">
+            <a routerLink="/login" class="text-sm text-blue-600 hover:underline">¿Ya tienes cuenta? Inicia sesión</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
