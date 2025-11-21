@@ -61,4 +61,12 @@ export class InscripcionesService {
   updateInscripcion(id: number, payload: Partial<InscripcionDTO>): Observable<InscripcionDTO> {
     return this.http.patch<InscripcionDTO>(`${environment.apiUrl}/inscripciones/${id}`, payload);
   }
+
+  validarCodigos(codigos: string[]) {
+    return this.http.post<any>(`${environment.apiUrl}/inscripciones/validar-masivo`, {
+      codigos
+    });
+  }
+
+
 }

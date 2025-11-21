@@ -445,16 +445,24 @@ export class Admin implements OnInit {
   }
 
   validateBulkCodes(): void {
-    const { valid } = this.parseBulkCodes(this.bulkCodesText);
-    this.validateStudentCodes(valid).subscribe({
-      next: (existing) => {
-        this.bulkValidCount = existing.length;
-        const setExisting = new Set(existing);
-        this.bulkInvalidCodes = valid.filter(v => !setExisting.has(v));
-        this.showToast(`Válidos: ${existing.length}. No encontrados: ${this.bulkInvalidCodes.length}`, 'info');
+    const allCodes = this.parseCsvToCodes(this.bulkCodesText);
+
+    this.inscripcionesService.validarCodigos(allCodes).subscribe({
+      next: (res) => {
+        this.bulkValidCount = res.cantidadValidos;
+        this.bulkInvalidCodes = res.invalidos;
+
+        this.showToast(
+          `Válidos: ${res.cantidadValidos}. Invalidos: ${res.invalidos.length}`,
+          'info'
+        );
+      },
+      error: () => {
+        this.showToast('Error validando códigos', 'error');
       }
     });
   }
+
 
   downloadBulkTemplate(): void {
     const sample = ['20240001', '20241002', '20242003'].join('\n');

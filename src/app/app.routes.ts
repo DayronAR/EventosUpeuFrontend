@@ -1,6 +1,7 @@
 // src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { RoleGuard } from '../guards/auth.guard';
+import {RegistrarMasivoComponent} from './components/admin/registrar-masivo/registrar-masivo.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -35,7 +36,10 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: { role: 'coordinator' }
   },
-
+  {
+    path: 'admin/registro-masivo',
+    component: RegistrarMasivoComponent,
+  },
 
 
   { path: '**', redirectTo: '/home' }

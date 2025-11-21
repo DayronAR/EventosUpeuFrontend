@@ -1,0 +1,34 @@
+<div class="p-6 max-w-lg">
+
+  <h2 class="text-xl font-bold mb-4">
+    Registro Masivo de Participantes
+  </h2>
+
+  <label class="font-medium">Códigos de Estudiante</label>
+  <textarea
+    [(ngModel)]="codigosTexto"
+    class="w-full p-2 border rounded mt-2 h-32"
+    placeholder="Ingrese códigos separados por salto de línea, coma o espacio">
+  </textarea>
+
+  <button
+    class="bg-blue-600 text-white px-4 py-2 rounded mt-3"
+    (click)="validar()">
+    Validar Códigos
+  </button>
+
+  <div class="mt-4">
+    <div *ngIf="cantidadValidos > 0" class="text-green-600 font-semibold">
+      ✔ {{ cantidadValidos }} códigos válidos
+    </div>
+    <div *ngIf="invalidos.length > 0" class="text-red-600 font-semibold">
+      ✖ {{ invalidos.length }} códigos inválidos
+    </div>
+
+    <ul class="mt-2 text-sm">
+      <li *ngFor="let c of validos" class="text-green-500">✔ {{ c }}</li>
+      <li *ngFor="let c of invalidos" class="text-red-500">✖ {{ c }}</li>
+    </ul>
+  </div>
+
+</div>
