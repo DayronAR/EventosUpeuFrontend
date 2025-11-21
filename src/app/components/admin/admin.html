@@ -313,10 +313,6 @@
                 Seleccionar Archivo
                 <input type="file" accept=".csv" (change)="onBulkFileChange($event)" class="hidden" />
               </label>
-              <button type="button" (click)="downloadBulkTemplate()" class="inline-flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16M4 20h16M4 12h16"/></svg>
-                Descargar Plantilla
-              </button>
               <button type="button" (click)="loadAllStudentCodesForBulk()" class="inline-flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
                 Cargar todos los códigos
@@ -388,22 +384,14 @@
           </div>
         </div>
 
-        <div class="bg-gray-100 rounded-lg p-1 inline-flex">
-          <button (click)="setAttendanceMode('qr')" [class]="attendanceMode === 'qr' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'" class="px-4 py-2 rounded-md transition-colors text-sm font-medium">Escanear QR</button>
-          <button (click)="setAttendanceMode('manual')" [class]="attendanceMode === 'manual' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'" class="px-4 py-2 rounded-md transition-colors text-sm font-medium">Registro Manual</button>
-        </div>
 
-        <div class="space-y-2">
-          <label class="block text-sm font-medium text-gray-700">{{ attendanceMode === 'qr' ? 'Código QR' : 'Código de Estudiante' }}</label>
-          <input type="text" [(ngModel)]="qrInput" placeholder="{{ attendanceMode === 'qr' ? 'Escanea o ingresa el código QR' : 'Ingresa el código del estudiante' }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          <p class="text-xs text-gray-500">Escanea el código QR del estudiante o ingresa manualmente</p>
-          <button type="button" (click)="registerAttendance()" class="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors">Registrar Asistencia</button>
-        </div>
+
+
 
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <div class="text-sm font-semibold text-gray-800">Inscritos</div>
-            <input [(ngModel)]="attendanceSearch" type="text" placeholder="Buscar por código o nombre" class="w-48 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
           </div>
           <div class="border rounded-lg overflow-hidden">
             <table class="w-full text-sm">
@@ -430,10 +418,24 @@
                     </span>
                   </td>
                   <td class="px-3 py-2">
-                    <input type="checkbox" [checked]="it.asistio" (change)="markAttendance(it, $event.target.checked)" />
+
+
+
+
+
+                    <input type="checkbox"
+                           [(ngModel)]="it.asistio"
+                           (change)="markAttendance(it, it.asistio)"/>
+
+
+
+
+
+
                   </td>
                   <td class="px-3 py-2">
-                    <button [disabled]="it.asistio" (click)="updateRowAttendance(it)" class="px-3 py-1 border rounded hover:bg-gray-50">Marcar</button>
+                    <button [disabled]="it.asistio" (click)="markAttendance(it, true)">Marcar</button>
+
                   </td>
                 </tr>
               </tbody>

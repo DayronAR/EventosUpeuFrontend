@@ -58,15 +58,31 @@ export class InscripcionesService {
     });
   }
 
-  updateInscripcion(id: number, payload: Partial<InscripcionDTO>): Observable<InscripcionDTO> {
-    return this.http.patch<InscripcionDTO>(`${environment.apiUrl}/inscripciones/${id}`, payload);
+  updateInscripcion(id: number, dto: any) {
+    return this.http.put(`${environment.apiUrl}/inscripciones/${id}`, dto);
   }
+
 
   validarCodigos(codigos: string[]) {
     return this.http.post<any>(`${environment.apiUrl}/inscripciones/validar-masivo`, {
       codigos
     });
   }
+
+  getAllStudentCodes(): Observable<string[]> {
+    return this.http.get<string[]>(`${environment.apiUrl}/usuarios/codigos`);
+  }
+
+  patchEstado(id: number, estado: string) {
+    return this.http.patch(
+      `${environment.apiUrl}/inscripciones/${id}`,
+      { estado }  // JSON EXACTO
+    );
+  }
+
+
+
+
 
 
 }
