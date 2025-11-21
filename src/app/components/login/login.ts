@@ -56,16 +56,5 @@ export class Login {
     });
   }
 
-  fillCredentials(role: 'admin' | 'coordinator' | 'student') {
-    const credentials = {
-      admin: { email: 'admin@upeu.edu.pe', password: 'admin123' },
-      coordinator: { email: 'coordinador@upeu.edu.pe', password: 'coord123' },
-      student: { email: '2020001@upeu.edu.pe', password: 'student123' }
-    };
-
-    this.email = credentials[role].email;
-    this.password = credentials[role].password;
-    this.error = '';
-  }
 
 }

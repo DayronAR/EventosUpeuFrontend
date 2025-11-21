@@ -353,15 +353,6 @@ export class Home implements OnInit {
     });
   }
 
-  fillTest(role: 'admin' | 'student') {
-    const credentials: any = {
-      admin: { email: 'admin@upeu.edu.pe', password: 'admin123' },
-      student: { email: '2020001@upeu.edu.pe', password: 'student123' },
-    };
-    this.loginEmail = credentials[role].email;
-    this.loginPassword = credentials[role].password;
-    this.loginError = '';
-  }
 
   setActiveTab(tab: 'upcoming' | 'all') {
     this.activeTab = tab;
