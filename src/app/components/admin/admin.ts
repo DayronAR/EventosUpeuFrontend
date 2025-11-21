@@ -10,6 +10,8 @@ import { MetodoPagoEventoService } from '../../../services/metodo-pago-evento.se
 import { FechaeventoService } from '../../../services/fechaevento.service';
 import { forkJoin, of, map, catchError, Observable } from 'rxjs';
 import { EstudianteUpeuService } from '../../../services/estudiante-upeu.service';
+import { UsuariosService, UsuarioDTO } from '../../../services/usuarios.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -32,6 +34,33 @@ export class Admin implements OnInit {
   bulkInvalidCodes: string[] = [];
   loadingCodes: boolean = false;
   userManagementOpen: boolean = false;
+  userTab: 'create' | 'list' | 'stats' = 'stats';
+  userNombreCompleto: string = '';
+  userEmail: string = '';
+  userPassword: string = '';
+  userRol: string = 'Administrador';
+  userDni: string = '';
+  userTelefono: string = '';
+  userCreating: boolean = false;
+  userError: string = '';
+  usuarios: any[] = [];
+  usuariosSearch: string = '';
+  usuariosLoading: boolean = false;
+  usuariosStats: { total: number; admin: number; coordinator: number; student: number } | null =
+    null;
+  usuariosPage: number = 0;
+  usuariosSize: number = 10;
+  usuariosTotalPages: number = 0;
+  usuariosTotalElements: number = 0;
+  usuariosRoleFilter: string = '';
+  editingUsuarioId: number | null = null;
+  editNombre: string = '';
+  editApellidos: string = '';
+  editEmail: string = '';
+  editRol: string = 'ADMIN';
+  editActivo: boolean = true;
+  savingUsuario: boolean = false;
+  deletingUsuarioId: number | null = null;
 
   events: UiEvent[] = [];
   deletingEventId: string | null = null;
@@ -54,7 +83,9 @@ export class Admin implements OnInit {
     private inscripcionesService: InscripcionesService,
     private metodoPagoEventoService: MetodoPagoEventoService,
     private fechaeventoService: FechaeventoService,
-    private estudianteService: EstudianteUpeuService
+    private estudianteService: EstudianteUpeuService,
+    private usuariosService: UsuariosService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -744,6 +775,227 @@ export class Admin implements OnInit {
   logout(): void {
     localStorage.removeItem('currentUser');
     window.location.href = '/home';
+  }
+
+  openUserManagement(): void {
+    this.userManagementOpen = true;
+    this.userTab = 'stats';
+    this.loadUsuarios();
+    this.loadUsuariosStats();
+  }
+
+  private mapRolToBackend(rol: string): string {
+    const r = (rol || '').toLowerCase();
+    if (r.includes('admin')) return 'ADMIN';
+    if (r.includes('coord')) return 'COORDINADOR';
+    return 'STUDENT';
+  }
+
+  createUsuario(): void {
+    const nombreCompleto = (this.userNombreCompleto || '').trim();
+    const email = (this.userEmail || '').trim();
+    const password = (this.userPassword || '').trim();
+    if (!nombreCompleto || !email || !password) {
+      this.userError = 'Completa los campos obligatorios';
+      return;
+    }
+    const parts = nombreCompleto.split(' ');
+    const nombre = parts[0] || '';
+    const apellidos = parts.slice(1).join(' ') || '';
+    const rol = this.mapRolToBackend(this.userRol);
+    const payload: UsuarioDTO = {
+      nombre,
+      apellidos,
+      email,
+      password,
+      rol,
+    };
+    const dniVal = (this.userDni || '').trim();
+    const telVal = (this.userTelefono || '').trim();
+    if (dniVal) payload.dni = dniVal;
+    if (telVal) payload.telefono = telVal;
+    this.userCreating = true;
+    this.userError = '';
+    this.usuariosService.create(payload).subscribe({
+      next: (u) => {
+        this.userCreating = false;
+        this.userNombreCompleto = '';
+        this.userEmail = '';
+        this.userPassword = '';
+        this.userRol = 'Administrador';
+        this.userDni = '';
+        this.userTelefono = '';
+        this.showToast('Usuario creado', 'success');
+        this.loadUsuarios();
+        this.loadUsuariosStats();
+      },
+      error: (err) => {
+        const msg =
+          typeof err?.error === 'string'
+            ? err.error
+            : err?.error?.message || err?.message || 'Error creando usuario';
+        this.userError = msg;
+        this.userCreating = false;
+        this.showToast(msg, 'error');
+      },
+    });
+  }
+
+  loadUsuarios(): void {
+    this.usuariosLoading = true;
+    const params: any = { search: this.usuariosSearch };
+    if (this.usuariosRoleFilter) params.role = this.usuariosRoleFilter;
+    if (this.usuariosSize > 0) {
+      params.page = this.usuariosPage;
+      params.size = this.usuariosSize;
+    }
+    this.usuariosService.list(params).subscribe({
+      next: (res: any) => {
+        let items = Array.isArray(res) ? res : res?.content || [];
+        const q = (this.usuariosSearch || '').trim().toLowerCase();
+        const role = (this.usuariosRoleFilter || '').trim().toUpperCase();
+        if (q) {
+          items = items.filter((u: any) => {
+            const name = `${String(u.nombre || '')} ${String(u.apellidos || '')}`.toLowerCase();
+            const email = String(u.email || '').toLowerCase();
+            return name.includes(q) || email.includes(q);
+          });
+        }
+        if (role) {
+          items = items.filter((u: any) => {
+            const r = String(u.rol || '').toUpperCase();
+            if (role === 'STUDENT') return r === 'STUDENT' || r === 'USER' || r === 'ESTUDIANTE';
+            if (role === 'COORDINATOR' || role === 'COORDINADOR')
+              return r === 'COORDINATOR' || r === 'COORDINADOR';
+            return r === role;
+          });
+        }
+        this.usuarios = items;
+        this.usuariosTotalElements = Array.isArray(res) ? items.length : res?.totalElements || 0;
+        this.usuariosTotalPages = Array.isArray(res) ? 1 : res?.totalPages || 0;
+        this.usuariosLoading = false;
+      },
+      error: () => {
+        this.usuariosLoading = false;
+      },
+    });
+  }
+
+  loadUsuariosStats(): void {
+    this.usuariosService.stats().subscribe({
+      next: (s) => {
+        this.usuariosStats = s as any;
+      },
+      error: () => {
+        this.usuariosService.list({}).subscribe({
+          next: (res: any) => {
+            const items: any[] = Array.isArray(res) ? res : res?.content || [];
+            const total = items.length;
+            const admin = items.filter((u) => String(u.rol || '').toUpperCase() === 'ADMIN').length;
+            const coordinator = items.filter((u) => {
+              const r = String(u.rol || '').toUpperCase();
+              return r === 'COORDINATOR' || r === 'COORDINADOR';
+            }).length;
+            const student = items.filter((u) => {
+              const r = String(u.rol || '').toUpperCase();
+              return r === 'STUDENT' || r === 'USER' || r === 'ESTUDIANTE';
+            }).length;
+            this.usuariosStats = { total, admin, coordinator, student } as any;
+          },
+          error: () => {
+            this.usuariosStats = { total: 0, admin: 0, coordinator: 0, student: 0 } as any;
+          },
+        });
+      },
+    });
+  }
+
+  setUsuariosSize(size: number): void {
+    this.usuariosSize = size;
+    this.usuariosPage = 0;
+    this.loadUsuarios();
+  }
+
+  nextUsuariosPage(): void {
+    if (this.usuariosPage + 1 < this.usuariosTotalPages) {
+      this.usuariosPage += 1;
+      this.loadUsuarios();
+    }
+  }
+
+  prevUsuariosPage(): void {
+    if (this.usuariosPage > 0) {
+      this.usuariosPage -= 1;
+      this.loadUsuarios();
+    }
+  }
+
+  startEditUsuario(u: any): void {
+    this.editingUsuarioId = Number(u.id);
+    this.editNombre = u.nombre || '';
+    this.editApellidos = u.apellidos || '';
+    this.editEmail = u.email || '';
+    this.editRol = u.rol || 'STUDENT';
+    this.editActivo = !!u.activo;
+  }
+
+  cancelEditUsuario(): void {
+    this.editingUsuarioId = null;
+    this.savingUsuario = false;
+  }
+
+  saveEditUsuario(): void {
+    if (!this.editingUsuarioId) return;
+    this.savingUsuario = true;
+    const payload: Partial<UsuarioDTO> = {
+      nombre: this.editNombre,
+      apellidos: this.editApellidos,
+      email: this.editEmail,
+      rol: this.editRol,
+      activo: this.editActivo,
+    };
+    this.usuariosService.update(this.editingUsuarioId, payload).subscribe({
+      next: (u) => {
+        this.usuarios = this.usuarios.map((x: any) =>
+          x.id === this.editingUsuarioId ? { ...x, ...u } : x
+        );
+        this.savingUsuario = false;
+        this.editingUsuarioId = null;
+        this.showToast('Usuario actualizado', 'success');
+        this.loadUsuariosStats();
+      },
+      error: (err) => {
+        const msg =
+          typeof err?.error === 'string'
+            ? err.error
+            : err?.error?.message || err?.message || 'Error actualizando usuario';
+        this.savingUsuario = false;
+        this.showToast(msg, 'error');
+      },
+    });
+  }
+
+  deleteUsuario(id: number): void {
+    const ok = confirm('¿Eliminar este usuario?');
+    if (!ok) return;
+    this.deletingUsuarioId = id;
+    this.usuariosService.delete(id).subscribe({
+      next: () => {
+        this.usuarios = this.usuarios.filter((x: any) => x.id !== id);
+        this.deletingUsuarioId = null;
+        if (this.usuariosTotalElements > 0) this.usuariosTotalElements -= 1;
+        this.showToast('Usuario eliminado', 'success');
+        this.loadUsuariosStats();
+      },
+      error: (err) => {
+        const msg =
+          typeof err?.error === 'string'
+            ? err.error
+            : err?.error?.message || err?.message || 'Error eliminando usuario';
+        this.deletingUsuarioId = null;
+        this.showToast(msg, 'error');
+      },
+    });
   }
 
   // MEJORA: Mejorar la validación de imágenes

@@ -7,13 +7,20 @@
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              ></path>
             </svg>
           </div>
           <div>
             <h2 class="text-xl font-bold text-gray-900">Sistema de Eventos UPEU</h2>
             <p class="text-sm text-gray-600">
-              {{ currentUser?.role === 'admin' ? 'Panel de Administración' : 'Panel de Coordinador' }}
+              {{
+                currentUser?.role === 'admin' ? 'Panel de Administración' : 'Panel de Coordinador'
+              }}
             </p>
           </div>
         </div>
@@ -23,11 +30,16 @@
           </span>
           <button
             *ngIf="currentUser?.role === 'admin'"
-            (click)="userManagementOpen = true"
+            (click)="openUserManagement()"
             class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+              ></path>
             </svg>
             Gestión de Usuarios
           </button>
@@ -36,7 +48,12 @@
             class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              ></path>
             </svg>
             Cerrar Sesión
           </button>
@@ -55,7 +72,12 @@
         </div>
         <div class="flex items-center gap-2">
           <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            ></path>
           </svg>
           <div class="text-2xl font-bold">{{ totalEvents }}</div>
         </div>
@@ -68,7 +90,12 @@
         </div>
         <div class="flex items-center gap-2">
           <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
           </svg>
           <div class="text-2xl font-bold text-green-600">{{ publishedEvents }}</div>
         </div>
@@ -80,8 +107,18 @@
           <h3 class="text-sm font-medium text-gray-600">Total Inscripciones</h3>
         </div>
         <div class="flex items-center gap-2">
-          <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+          <svg
+            class="h-8 w-8 text-purple-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+            ></path>
           </svg>
           <div class="text-2xl font-bold text-purple-600">{{ totalRegistrations }}</div>
         </div>
@@ -93,8 +130,18 @@
           <h3 class="text-sm font-medium text-gray-600">Total Asistencias</h3>
         </div>
         <div class="flex items-center gap-2">
-          <svg class="h-8 w-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+          <svg
+            class="h-8 w-8 text-orange-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+            ></path>
           </svg>
           <div class="text-2xl font-bold text-orange-600">{{ totalAttendance }}</div>
         </div>
@@ -105,27 +152,33 @@
     <div class="bg-gray-100 rounded-lg p-1 mb-6 inline-flex">
       <button
         (click)="setActiveTab('all-events')"
-        [class]="activeTab === 'all-events'
-          ? 'bg-white text-blue-600 shadow-sm'
-          : 'text-gray-600 hover:text-gray-900'"
+        [class]="
+          activeTab === 'all-events'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+        "
         class="px-4 py-2 rounded-md transition-colors font-medium"
       >
         Todos los Eventos
       </button>
       <button
         (click)="setActiveTab('published')"
-        [class]="activeTab === 'published'
-          ? 'bg-white text-blue-600 shadow-sm'
-          : 'text-gray-600 hover:text-gray-900'"
+        [class]="
+          activeTab === 'published'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+        "
         class="px-4 py-2 rounded-md transition-colors font-medium"
       >
         Publicados
       </button>
       <button
         (click)="setActiveTab('draft')"
-        [class]="activeTab === 'draft'
-          ? 'bg-white text-blue-600 shadow-sm'
-          : 'text-gray-600 hover:text-gray-900'"
+        [class]="
+          activeTab === 'draft'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+        "
         class="px-4 py-2 rounded-md transition-colors font-medium"
       >
         Borradores
@@ -135,8 +188,18 @@
     <!-- Search and Create -->
     <div class="flex items-center gap-4 mb-6">
       <div class="relative flex-1 max-w-md">
-        <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        <svg
+          class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          ></path>
         </svg>
         <input
           type="text"
@@ -150,7 +213,12 @@
         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          ></path>
         </svg>
         Crear Evento
       </button>
@@ -158,7 +226,10 @@
 
     <!-- Lista de Eventos -->
     <div class="space-y-4">
-      <div *ngFor="let event of getTabEvents()" class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+      <div
+        *ngFor="let event of getTabEvents()"
+        class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+      >
         <div class="p-4">
           <div class="flex gap-4">
             <!-- Imagen del evento -->
@@ -168,7 +239,7 @@
                 [alt]="event.title"
                 class="w-20 h-20 object-cover rounded-lg border"
                 (error)="handleImageError($event, event)"
-              >
+              />
             </div>
 
             <!-- Información del evento -->
@@ -181,52 +252,79 @@
                   <div class="flex items-center gap-4 mt-2 text-sm text-gray-500">
                     <span class="flex items-center gap-1">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        ></path>
                       </svg>
                       {{ formatEventDate(event.startDate) }}
                     </span>
                     <span class="flex items-center gap-1">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        ></path>
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        ></path>
                       </svg>
                       {{ event.location }}
                     </span>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                          [ngClass]="{
-                            'bg-green-100 text-green-800': event.status === 'published',
-                            'bg-yellow-100 text-yellow-800': event.status === 'draft',
-                            'bg-blue-100 text-blue-800': event.status === 'ongoing',
-                            'bg-gray-100 text-gray-800': event.status === 'completed',
-                            'bg-red-100 text-red-800': event.status === 'cancelled'
-                          }">
+                    <span
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                      [ngClass]="{
+                        'bg-green-100 text-green-800': event.status === 'published',
+                        'bg-yellow-100 text-yellow-800': event.status === 'draft',
+                        'bg-blue-100 text-blue-800': event.status === 'ongoing',
+                        'bg-gray-100 text-gray-800': event.status === 'completed',
+                        'bg-red-100 text-red-800': event.status === 'cancelled'
+                      }"
+                    >
                       {{ getStatusText(event.status) }}
                     </span>
                   </div>
                 </div>
 
-              <!-- Botones de acción -->
-              <div class="flex flex-col items-end gap-2 ml-4">
-                <button
-                  (click)="editEvent(event)"
-                  class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                  </svg>
-                  Editar
-                </button>
-                <button
-                  (click)="deleteEvent(event)"
-                  [disabled]="(deletingEventId || '') === (event.id || '')"
-                  class="inline-flex items-center px-3 py-1.5 border border-red-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/>
-                  </svg>
-                  {{ (deletingEventId || '') === (event.id || '') ? 'Eliminando…' : 'Eliminar' }}
-                </button>
-              </div>
+                <!-- Botones de acción -->
+                <div class="flex flex-col items-end gap-2 ml-4">
+                  <button
+                    (click)="editEvent(event)"
+                    class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      ></path>
+                    </svg>
+                    Editar
+                  </button>
+                  <button
+                    (click)="deleteEvent(event)"
+                    [disabled]="(deletingEventId || '') === (event.id || '')"
+                    class="inline-flex items-center px-3 py-1.5 border border-red-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"
+                      />
+                    </svg>
+                    {{ (deletingEventId || '') === (event.id || '') ? 'Eliminando…' : 'Eliminar' }}
+                  </button>
+                </div>
               </div>
 
               <!-- Información adicional -->
@@ -237,9 +335,7 @@
                   <span>Facultad: {{ event.faculty }}</span>
                   <span *ngIf="event.school">Escuela: {{ event.school }}</span>
                 </div>
-                <div class="text-xs text-gray-400">
-                  Creado: {{ formatDate(event.createdAt) }}
-                </div>
+                <div class="text-xs text-gray-400">Creado: {{ formatDate(event.createdAt) }}</div>
               </div>
             </div>
           </div>
@@ -259,7 +355,12 @@
               class="border border-gray-300 px-3 py-2 rounded text-sm hover:bg-gray-100 transition-colors flex items-center justify-center gap-1"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                ></path>
               </svg>
               Inscripción
             </button>
@@ -268,7 +369,12 @@
               class="border border-gray-300 px-3 py-2 rounded text-sm hover:bg-gray-100 transition-colors flex items-center justify-center gap-1"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
+                ></path>
               </svg>
               Asistencia
             </button>
@@ -277,7 +383,12 @@
               class="border border-gray-300 px-3 py-2 rounded text-sm hover:bg-gray-100 transition-colors flex items-center justify-center gap-1"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                ></path>
               </svg>
               Reporte
             </button>
@@ -293,32 +404,78 @@
   </div>
 
   <!-- Bulk Registration Dialog (Diseño mejorado) -->
-  <div *ngIf="selectedEventForBulk" class="fixed inset-0 flex items-center justify-center p-4 z-50" style="background-color: rgba(0, 0, 0, 0.50);">
+  <div
+    *ngIf="selectedEventForBulk"
+    class="fixed inset-0 flex items-center justify-center p-4 z-50"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
     <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
       <div class="p-6 border-b border-gray-200 flex items-start justify-between">
         <div>
           <h3 class="text-xl font-semibold text-gray-800">Registro Masivo de Participantes</h3>
-          <p class="text-gray-600 text-sm mt-1">Registra múltiples estudiantes al evento: {{ selectedEventForBulk.title }}</p>
+          <p class="text-gray-600 text-sm mt-1">
+            Registra múltiples estudiantes al evento: {{ selectedEventForBulk.title }}
+          </p>
         </div>
-        <button (click)="selectedEventForBulk = null" class="text-gray-500 hover:text-gray-700">✕</button>
+        <button (click)="selectedEventForBulk = null" class="text-gray-500 hover:text-gray-700">
+          ✕
+        </button>
       </div>
 
       <div class="p-6">
         <div class="space-y-5">
           <div class="space-y-2">
-            <label class="block text-sm font-medium text-gray-700">Cargar desde archivo Excel/CSV</label>
+            <label class="block text-sm font-medium text-gray-700"
+              >Cargar desde archivo Excel/CSV</label
+            >
             <div class="grid grid-cols-3 gap-3">
-              <label class="cursor-pointer inline-flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V8l-6-4H4z"/></svg>
+              <label
+                class="cursor-pointer inline-flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4v16h16V8l-6-4H4z"
+                  />
+                </svg>
                 Seleccionar Archivo
-                <input type="file" accept=".csv" (change)="onBulkFileChange($event)" class="hidden" />
+                <input
+                  type="file"
+                  accept=".csv"
+                  (change)="onBulkFileChange($event)"
+                  class="hidden"
+                />
               </label>
-              <button type="button" (click)="downloadBulkTemplate()" class="inline-flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16M4 20h16M4 12h16"/></svg>
+              <button
+                type="button"
+                (click)="downloadBulkTemplate()"
+                class="inline-flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4h16M4 20h16M4 12h16"
+                  />
+                </svg>
                 Descargar Plantilla
               </button>
-              <button type="button" (click)="loadAllStudentCodesForBulk()" class="inline-flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+              <button
+                type="button"
+                (click)="loadAllStudentCodesForBulk()"
+                class="inline-flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 7h18M3 12h18M3 17h18"
+                  />
+                </svg>
                 Cargar todos los códigos
               </button>
             </div>
@@ -326,15 +483,38 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Códigos de Estudiante</label>
-            <p *ngIf="loadingCodes" class="text-xs text-blue-600 mb-1">Cargando códigos desde estudiantes-upeu…</p>
-            <textarea rows="6" [(ngModel)]="bulkCodesText" (ngModelChange)="computeBulkStats()" placeholder="Ingresa los códigos de estudiante separados por líneas, comas o espacios\nEjemplo:\n20240001\n20241002\n20242003" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-            <p class="text-xs text-gray-500 mt-1">Puedes separar los códigos por líneas, comas, punto y coma o espacios</p>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Códigos de Estudiante</label
+            >
+            <p *ngIf="loadingCodes" class="text-xs text-blue-600 mb-1">
+              Cargando códigos desde estudiantes-upeu…
+            </p>
+            <textarea
+              rows="6"
+              [(ngModel)]="bulkCodesText"
+              (ngModelChange)="computeBulkStats()"
+              placeholder="Ingresa los códigos de estudiante separados por líneas, comas o espacios\nEjemplo:\n20240001\n20241002\n20242003"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            ></textarea>
+            <p class="text-xs text-gray-500 mt-1">
+              Puedes separar los códigos por líneas, comas, punto y coma o espacios
+            </p>
           </div>
 
           <div class="flex items-center justify-between">
-            <button type="button" (click)="validateBulkCodes()" class="inline-flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1 4h1m-1-4V9m0 0h.01M12 19a7 7 0 100-14 7 7 0 000 14z"/></svg>
+            <button
+              type="button"
+              (click)="validateBulkCodes()"
+              class="inline-flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1 4h1m-1-4V9m0 0h.01M12 19a7 7 0 100-14 7 7 0 000 14z"
+                />
+              </svg>
               Validar Códigos
             </button>
             <div class="text-sm text-gray-600">Listos: {{ bulkValidCount }}</div>
@@ -343,34 +523,74 @@
           <div *ngIf="selectedEventForBulk?.isPaid" class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Método de Pago</label>
-              <select [(ngModel)]="bulkMetodoPago" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select
+                [(ngModel)]="bulkMetodoPago"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
                 <option value="" disabled selected>Selecciona método</option>
-                <option *ngFor="let m of (paymentMethodsByEvent[selectedEventForBulk.id] || [])" [value]="m">{{ m | titlecase }}</option>
+                <option
+                  *ngFor="let m of paymentMethodsByEvent[selectedEventForBulk.id] || []"
+                  [value]="m"
+                >
+                  {{ m | titlecase }}
+                </option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Número de Operación</label>
-              <input type="text" [(ngModel)]="bulkNumeroOperacion" placeholder="Ej: 123456789" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Número de Operación</label
+              >
+              <input
+                type="text"
+                [(ngModel)]="bulkNumeroOperacion"
+                placeholder="Ej: 123456789"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
           </div>
 
           <div class="flex gap-3 pt-2">
-            <button type="button" (click)="selectedEventForBulk = null" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">Cancelar</button>
-            <button type="button" [disabled]="(bulkValidCount === 0) || (selectedEventForBulk?.isPaid && (!bulkMetodoPago || !bulkNumeroOperacion))" (click)="handleBulkRegister(selectedEventForBulk.id, parseCsvToCodes(bulkCodesText))" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Registrar {{ bulkValidCount }} Estudiantes</button>
+            <button
+              type="button"
+              (click)="selectedEventForBulk = null"
+              class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              [disabled]="
+                bulkValidCount === 0 ||
+                (selectedEventForBulk?.isPaid && (!bulkMetodoPago || !bulkNumeroOperacion))
+              "
+              (click)="handleBulkRegister(selectedEventForBulk.id, parseCsvToCodes(bulkCodesText))"
+              class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Registrar {{ bulkValidCount }} Estudiantes
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div *ngIf="selectedEventForAttendance" class="fixed inset-0 flex items-center justify-center p-4 z-50" style="background-color: rgba(0, 0, 0, 0.50);">
+  <div
+    *ngIf="selectedEventForAttendance"
+    class="fixed inset-0 flex items-center justify-center p-4 z-50"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
     <div class="bg-white rounded-lg shadow-xl max-w-xl w-full">
       <div class="p-6 border-b border-gray-200 flex items-start justify-between">
         <div>
           <h3 class="text-xl font-semibold text-gray-800">Registro de Asistencia</h3>
           <p class="text-gray-600 text-sm mt-1">{{ selectedEventForAttendance.title }}</p>
         </div>
-        <button (click)="selectedEventForAttendance = null" class="text-gray-500 hover:text-gray-700">✕</button>
+        <button
+          (click)="selectedEventForAttendance = null"
+          class="text-gray-500 hover:text-gray-700"
+        >
+          ✕
+        </button>
       </div>
       <div class="p-6 space-y-6">
         <div class="grid grid-cols-3 gap-3">
@@ -389,21 +609,65 @@
         </div>
 
         <div class="bg-gray-100 rounded-lg p-1 inline-flex">
-          <button (click)="setAttendanceMode('qr')" [class]="attendanceMode === 'qr' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'" class="px-4 py-2 rounded-md transition-colors text-sm font-medium">Escanear QR</button>
-          <button (click)="setAttendanceMode('manual')" [class]="attendanceMode === 'manual' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'" class="px-4 py-2 rounded-md transition-colors text-sm font-medium">Registro Manual</button>
+          <button
+            (click)="setAttendanceMode('qr')"
+            [class]="
+              attendanceMode === 'qr'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            "
+            class="px-4 py-2 rounded-md transition-colors text-sm font-medium"
+          >
+            Escanear QR
+          </button>
+          <button
+            (click)="setAttendanceMode('manual')"
+            [class]="
+              attendanceMode === 'manual'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            "
+            class="px-4 py-2 rounded-md transition-colors text-sm font-medium"
+          >
+            Registro Manual
+          </button>
         </div>
 
         <div class="space-y-2">
-          <label class="block text-sm font-medium text-gray-700">{{ attendanceMode === 'qr' ? 'Código QR' : 'Código de Estudiante' }}</label>
-          <input type="text" [(ngModel)]="qrInput" placeholder="{{ attendanceMode === 'qr' ? 'Escanea o ingresa el código QR' : 'Ingresa el código del estudiante' }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          <p class="text-xs text-gray-500">Escanea el código QR del estudiante o ingresa manualmente</p>
-          <button type="button" (click)="registerAttendance()" class="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors">Registrar Asistencia</button>
+          <label class="block text-sm font-medium text-gray-700">{{
+            attendanceMode === 'qr' ? 'Código QR' : 'Código de Estudiante'
+          }}</label>
+          <input
+            type="text"
+            [(ngModel)]="qrInput"
+            placeholder="{{
+              attendanceMode === 'qr'
+                ? 'Escanea o ingresa el código QR'
+                : 'Ingresa el código del estudiante'
+            }}"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <p class="text-xs text-gray-500">
+            Escanea el código QR del estudiante o ingresa manualmente
+          </p>
+          <button
+            type="button"
+            (click)="registerAttendance()"
+            class="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors"
+          >
+            Registrar Asistencia
+          </button>
         </div>
 
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <div class="text-sm font-semibold text-gray-800">Inscritos</div>
-            <input [(ngModel)]="attendanceSearch" type="text" placeholder="Buscar por código o nombre" class="w-48 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <input
+              [(ngModel)]="attendanceSearch"
+              type="text"
+              placeholder="Buscar por código o nombre"
+              class="w-48 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
           <div class="border rounded-lg overflow-hidden">
             <table class="w-full text-sm">
@@ -421,38 +685,477 @@
                   <td class="px-3 py-2">{{ it.codigoEstudiante }}</td>
                   <td class="px-3 py-2">{{ it.nombre }}</td>
                   <td class="px-3 py-2">
-                    <span class="px-2 py-1 rounded-full text-xs font-medium"
-                          [ngClass]="{
-                            'bg-green-100 text-green-800': it.asistio,
-                            'bg-yellow-100 text-yellow-800': !it.asistio
-                          }">
+                    <span
+                      class="px-2 py-1 rounded-full text-xs font-medium"
+                      [ngClass]="{
+                        'bg-green-100 text-green-800': it.asistio,
+                        'bg-yellow-100 text-yellow-800': !it.asistio
+                      }"
+                    >
                       {{ it.asistio ? 'ASISTIO' : 'CONFIRMADO' }}
                     </span>
                   </td>
                   <td class="px-3 py-2">
-                    <input type="checkbox" [checked]="it.asistio" (change)="markAttendance(it, $event.target.checked)" />
+                    <input
+                      type="checkbox"
+                      [checked]="it.asistio"
+                      (change)="markAttendance(it, $event.target.checked)"
+                    />
                   </td>
                   <td class="px-3 py-2">
-                    <button [disabled]="it.asistio" (click)="updateRowAttendance(it)" class="px-3 py-1 border rounded hover:bg-gray-50">Marcar</button>
+                    <button
+                      [disabled]="it.asistio"
+                      (click)="updateRowAttendance(it)"
+                      class="px-3 py-1 border rounded hover:bg-gray-50"
+                    >
+                      Marcar
+                    </button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="flex items-center justify-end gap-2">
-            <button (click)="saveAttendance()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Guardar cambios</button>
+            <button
+              (click)="saveAttendance()"
+              class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Guardar cambios
+            </button>
           </div>
         </div>
 
         <div class="space-y-2">
           <div class="text-sm font-semibold text-gray-800">Últimas Asistencias</div>
-          <div *ngIf="recentAttendance.length === 0" class="text-xs text-gray-500">Sin registros recientes</div>
-          <div *ngFor="let a of recentAttendance" class="flex items-center justify-between border-b py-2">
+          <div *ngIf="recentAttendance.length === 0" class="text-xs text-gray-500">
+            Sin registros recientes
+          </div>
+          <div
+            *ngFor="let a of recentAttendance"
+            class="flex items-center justify-between border-b py-2"
+          >
             <div>
               <div class="font-medium text-sm">{{ a.codigoEstudiante }}</div>
               <div class="text-xs text-gray-600">{{ a.nombre }}</div>
             </div>
             <div class="text-xs text-gray-500">{{ formatEventDate(a.fecha) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="userManagementOpen"
+    class="fixed inset-0 flex items-center justify-center p-4 z-50"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl">
+      <div class="flex items-start justify-between p-6 border-b border-gray-200">
+        <div>
+          <h3 class="text-xl font-semibold text-gray-900">Gestión de Usuarios y Roles</h3>
+          <p class="text-sm text-gray-600">
+            Administra coordinadores de eventos y otros usuarios del sistema
+          </p>
+        </div>
+        <button (click)="userManagementOpen = false" class="text-gray-500 hover:text-gray-700">
+          ✕
+        </button>
+      </div>
+
+      <div class="p-6">
+        <div class="bg-gray-100 rounded-lg p-1 mb-6 inline-flex">
+          <button
+            (click)="userTab = 'create'"
+            [class]="
+              userTab === 'create'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-700 hover:text-gray-900'
+            "
+            class="px-4 py-2 rounded-md transition-colors font-medium"
+          >
+            Crear Usuario
+          </button>
+          <button
+            (click)="userTab = 'list'; loadUsuarios()"
+            [class]="
+              userTab === 'list'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-700 hover:text-gray-900'
+            "
+            class="px-4 py-2 rounded-md transition-colors font-medium"
+          >
+            Lista de Usuarios
+          </button>
+          <button
+            (click)="userTab = 'stats'; loadUsuariosStats()"
+            [class]="
+              userTab === 'stats'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-700 hover:text-gray-900'
+            "
+            class="px-4 py-2 rounded-md transition-colors font-medium"
+          >
+            Estadísticas
+          </button>
+        </div>
+
+        <div *ngIf="userTab === 'stats'" class="space-y-6">
+          <div class="grid grid-cols-3 gap-4">
+            <div class="border border-gray-200 rounded-lg p-4">
+              <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-600">Total de Usuarios</div>
+                <svg
+                  class="w-5 h-5 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5.121 17.804A4 4 0 018 16h8a4 4 0 012.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </div>
+              <div class="mt-2 text-2xl font-bold">{{ usuariosStats?.total ?? 0 }}</div>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-4">
+              <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-600">Coordinadores</div>
+                <svg
+                  class="w-5 h-5 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 20h5v-1a6 6 0 00-9-5.197M3 20h12v-1a6 6 0 00-12 0v1zm9-9a4 4 0 100-8 4 4 0 000 8z"
+                  />
+                </svg>
+              </div>
+              <div class="mt-2 text-2xl font-bold text-green-600">
+                {{ usuariosStats?.coordinator ?? 0 }}
+              </div>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-4">
+              <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-600">Administradores</div>
+                <svg
+                  class="w-5 h-5 text-red-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 14a4 4 0 00-8 0v1H5a2 2 0 00-2 2v1h18v-1a2 2 0 00-2-2h-3v-1zM12 7a4 4 0 110 8 4 4 0 010-8z"
+                  />
+                </svg>
+              </div>
+              <div class="mt-2 text-2xl font-bold text-red-600">
+                {{ usuariosStats?.admin ?? 0 }}
+              </div>
+            </div>
+          </div>
+
+          <div class="border border-gray-200 rounded-lg p-4">
+            <div class="text-sm font-medium text-gray-800 mb-4">Distribución de Roles</div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex items-center justify-between text-sm">
+                  <span>Administradores</span><span>{{ usuariosStats?.admin ?? 0 }}</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded">
+                  <div
+                    class="h-2 bg-red-600 rounded"
+                    [style.width]="
+                      ((usuariosStats?.admin || 0) / (usuariosStats?.total || 1)) * 100 + '%'
+                    "
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-sm">
+                  <span>Coordinadores</span><span>{{ usuariosStats?.coordinator ?? 0 }}</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded">
+                  <div
+                    class="h-2 bg-blue-600 rounded"
+                    [style.width]="
+                      ((usuariosStats?.coordinator || 0) / (usuariosStats?.total || 1)) * 100 + '%'
+                    "
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-sm">
+                  <span>Estudiantes</span><span>{{ usuariosStats?.student ?? 0 }}</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded">
+                  <div
+                    class="h-2 bg-green-600 rounded"
+                    [style.width]="
+                      ((usuariosStats?.student || 0) / (usuariosStats?.total || 1)) * 100 + '%'
+                    "
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="userTab === 'create'" class="space-y-6">
+          <div class="border border-gray-200 rounded-lg p-4">
+            <div class="text-lg font-semibold text-gray-800 mb-4">Crear Nuevo Usuario</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Nombre Completo *</label
+                >
+                <input
+                  type="text"
+                  [(ngModel)]="userNombreCompleto"
+                  placeholder="Nombre completo"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Correo Electrónico *</label
+                >
+                <input
+                  type="email"
+                  [(ngModel)]="userEmail"
+                  placeholder="correo@upeu.edu.pe"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña *</label>
+                <input
+                  type="password"
+                  [(ngModel)]="userPassword"
+                  placeholder="••••••••"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Rol *</label>
+                <select
+                  [(ngModel)]="userRol"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option>Administrador</option>
+                  <option>Coordinador</option>
+                  <option>Estudiante</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">DNI</label>
+                <input
+                  type="text"
+                  [(ngModel)]="userDni"
+                  placeholder="12345678"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                <input
+                  type="text"
+                  [(ngModel)]="userTelefono"
+                  placeholder="987654321"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            <div
+              class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800"
+            >
+              Nota: Los coordinadores podrán crear eventos, gestionar inscripciones y registrar
+              asistencias. Los administradores tienen acceso completo al sistema.
+            </div>
+            <div class="mt-4">
+              <button
+                [disabled]="userCreating"
+                (click)="createUsuario()"
+                class="w-full md:w-auto px-5 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors inline-flex items-center gap-2"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                {{ userCreating ? 'Creando…' : 'Crear Usuario' }}
+              </button>
+              <div *ngIf="userError" class="mt-2 text-sm text-red-600">{{ userError }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="userTab === 'list'" class="space-y-6">
+          <div class="border border-gray-200 rounded-lg p-4">
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-lg font-semibold text-gray-800">Usuarios</div>
+              <div class="flex items-center gap-3">
+                <select
+                  [(ngModel)]="usuariosRoleFilter"
+                  (ngModelChange)="loadUsuarios()"
+                  class="px-3 py-2 border border-gray-300 rounded-lg"
+                >
+                  <option value="">Todos</option>
+                  <option value="ADMIN">ADMIN</option>
+                  <option value="COORDINATOR">COORDINATOR</option>
+                  <option value="STUDENT">STUDENT</option>
+                </select>
+                <input
+                  [(ngModel)]="usuariosSearch"
+                  (ngModelChange)="loadUsuarios()"
+                  type="text"
+                  placeholder="Buscar usuario"
+                  class="w-52 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            <div class="border rounded-lg overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="text-left px-3 py-2">Nombre</th>
+                    <th class="text-left px-3 py-2">Correo</th>
+                    <th class="text-left px-3 py-2">Rol</th>
+                    <th class="text-left px-3 py-2">Estado</th>
+                    <th class="text-left px-3 py-2">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="usuariosLoading" class="border-t">
+                    <td class="px-3 py-2" colspan="5">Cargando…</td>
+                  </tr>
+                  <ng-container *ngFor="let u of usuarios">
+                    <tr class="border-t">
+                      <td class="px-3 py-2">{{ u.nombre }} {{ u.apellidos }}</td>
+                      <td class="px-3 py-2">{{ u.email }}</td>
+                      <td class="px-3 py-2">{{ u.rol }}</td>
+                      <td class="px-3 py-2">
+                        <span
+                          class="px-2 py-1 rounded-full text-xs"
+                          [ngClass]="
+                            u.activo ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                          "
+                          >{{ u.activo ? 'Activo' : 'Inactivo' }}</span
+                        >
+                      </td>
+                      <td class="px-3 py-2">
+                        <div class="flex gap-2">
+                          <button
+                            class="px-3 py-1 border rounded hover:bg-gray-50"
+                            (click)="startEditUsuario(u)"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            class="px-3 py-1 border rounded hover:bg-red-50 text-red-700"
+                            [disabled]="deletingUsuarioId === u.id"
+                            (click)="deleteUsuario(u.id)"
+                          >
+                            {{ deletingUsuarioId === u.id ? 'Eliminando…' : 'Eliminar' }}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr *ngIf="editingUsuarioId === u.id" class="border-t bg-gray-50">
+                      <td class="px-3 py-2">
+                        <input
+                          type="text"
+                          [(ngModel)]="editNombre"
+                          class="w-full px-2 py-1 border rounded"
+                        />
+                      </td>
+                      <td class="px-3 py-2">
+                        <input
+                          type="email"
+                          [(ngModel)]="editEmail"
+                          class="w-full px-2 py-1 border rounded"
+                        />
+                      </td>
+                      <td class="px-3 py-2">
+                        <select [(ngModel)]="editRol" class="px-2 py-1 border rounded">
+                          <option value="ADMIN">ADMIN</option>
+                          <option value="COORDINATOR">COORDINATOR</option>
+                          <option value="STUDENT">STUDENT</option>
+                        </select>
+                      </td>
+                      <td class="px-3 py-2">
+                        <select [(ngModel)]="editActivo" class="px-2 py-1 border rounded">
+                          <option [ngValue]="true">Activo</option>
+                          <option [ngValue]="false">Inactivo</option>
+                        </select>
+                      </td>
+                      <td class="px-3 py-2">
+                        <div class="flex gap-2">
+                          <button
+                            class="px-3 py-1 border rounded bg-blue-600 text-white hover:bg-blue-700"
+                            [disabled]="savingUsuario"
+                            (click)="saveEditUsuario()"
+                          >
+                            {{ savingUsuario ? 'Guardando…' : 'Guardar' }}
+                          </button>
+                          <button
+                            class="px-3 py-1 border rounded hover:bg-gray-100"
+                            (click)="cancelEditUsuario()"
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+            <div class="flex items-center justify-between mt-3">
+              <div class="text-sm text-gray-600">Total: {{ usuariosTotalElements }}</div>
+              <div class="flex items-center gap-2">
+                <button
+                  (click)="prevUsuariosPage()"
+                  class="px-3 py-1 border rounded"
+                  [disabled]="usuariosPage === 0"
+                >
+                  Anterior
+                </button>
+                <div class="text-sm">
+                  Página {{ usuariosPage + 1 }} / {{ usuariosTotalPages || 1 }}
+                </div>
+                <button
+                  (click)="nextUsuariosPage()"
+                  class="px-3 py-1 border rounded"
+                  [disabled]="usuariosPage + 1 >= usuariosTotalPages"
+                >
+                  Siguiente
+                </button>
+                <select
+                  [(ngModel)]="usuariosSize"
+                  (ngModelChange)="setUsuariosSize($event)"
+                  class="px-2 py-1 border rounded"
+                >
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="25">25</option>
+                  <option [ngValue]="50">50</option>
+                  <option [ngValue]="0">Sin paginación</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -469,11 +1172,15 @@
 </div>
 
 <div class="fixed top-4 right-4 space-y-2 z-50">
-  <div *ngFor="let t of toasts" class="px-3 py-2 rounded shadow" [ngClass]="{
-    'bg-green-100 text-green-800': t.type === 'success',
-    'bg-red-100 text-red-800': t.type === 'error',
-    'bg-blue-100 text-blue-800': t.type === 'info'
-  }">
+  <div
+    *ngFor="let t of toasts"
+    class="px-3 py-2 rounded shadow"
+    [ngClass]="{
+      'bg-green-100 text-green-800': t.type === 'success',
+      'bg-red-100 text-red-800': t.type === 'error',
+      'bg-blue-100 text-blue-800': t.type === 'info'
+    }"
+  >
     {{ t.text }}
   </div>
-  </div>
+</div>
