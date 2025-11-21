@@ -198,14 +198,6 @@
             <input [(ngModel)]="loginPassword" name="loginPassword" type="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
           </div>
           <div *ngIf="loginError" class="bg-red-50 text-red-700 text-sm rounded-lg p-3">{{ loginError }}</div>
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
-            <div>Estudiante: 2020001@upeu.edu.pe / student123</div>
-            <div>Admin: admin@upeu.edu.pe / admin123</div>
-            <div class="flex gap-2 mt-2">
-              <button type="button" (click)="fillTest('student')" class="px-2 py-1 bg-gray-200 rounded">Autocompletar Estudiante</button>
-              <button type="button" (click)="fillTest('admin')" class="px-2 py-1 bg-gray-200 rounded">Autocompletar Admin</button>
-            </div>
-          </div>
           <button type="submit" [disabled]="loginLoading" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">Iniciar Sesión</button>
         </form>
 

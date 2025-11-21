@@ -110,47 +110,31 @@ export class Createevento implements OnInit, OnChanges { // ← Agrega las inter
 
   // En createevento.ts - MEJORA los métodos de ciclo de vida
   ngOnInit() {
-    console.log('🎯 CreateEvento OnInit - Event recibido:', this.event);
-    console.log('🎯 CreateEvento OnInit - Open:', this.open);
-
     if (this.event) {
       this.loadEventData();
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('🔄 CreateEvento OnChanges - Cambios detectados:', changes);
-    console.log('🔄 CreateEvento OnChanges - Event actual:', this.event);
-    console.log('🔄 CreateEvento OnChanges - Open actual:', this.open);
-
     if (changes['event']) {
       const previousEvent = changes['event'].previousValue;
       const currentEvent = changes['event'].currentValue;
-
-      console.log('📊 Cambio en event - Anterior:', previousEvent);
-      console.log('📊 Cambio en event - Actual:', currentEvent);
-
       if (currentEvent) {
-        console.log('✅ Cargando datos del evento para editar');
         this.loadEventData();
       } else {
-        console.log('🆕 Reseteando formulario para nuevo evento');
         this.resetForm();
       }
     }
 
     if (changes['open']) {
-      console.log('🚪 Cambio en open:', changes['open'].currentValue);
+      // no-op
     }
   }
 
   loadEventData() {
     if (!this.event) {
-      console.log('❌ No hay evento para cargar');
       return;
     }
-
-    console.log('📥 Cargando datos del evento:', this.event);
 
     this.formData = {
       title: this.event.title || '',
@@ -174,9 +158,6 @@ export class Createevento implements OnInit, OnChanges { // ← Agrega las inter
     this.eventDates = this.event.eventDates ? [...this.event.eventDates] : [];
     this.newEventDate = { startDate: '', endDate: '', location: '' };
 
-    console.log('✅ Formulario cargado:', this.formData);
-    console.log('✅ Faculty seleccionada:', this.selectedFaculty);
-    console.log('✅ Event dates cargadas:', this.eventDates);
   }
 
   private formatDateForInput(isoDate: string): string {
@@ -191,7 +172,6 @@ export class Createevento implements OnInit, OnChanges { // ← Agrega las inter
   }
 
   resetForm() {
-    console.log('Reseteando formulario para nuevo evento');
     this.formData = {
       title: '',
       description: '',
@@ -235,8 +215,6 @@ export class Createevento implements OnInit, OnChanges { // ← Agrega las inter
     }
 
     // DEBUG: Verificar la imagen antes de enviar
-    console.log('🔍 [CREATEVENTO] Imagen en formulario:', this.formData.imageUrl);
-    console.log('🔍 [CREATEVENTO] Todos los datos:', this.formData);
 
     const eventData = {
       ...this.formData,
@@ -244,8 +222,6 @@ export class Createevento implements OnInit, OnChanges { // ← Agrega las inter
       endDate: new Date(this.formData.endDate).toISOString(),
       eventDates: this.eventDates.length > 0 ? this.eventDates : undefined
     };
-
-    console.log('🚀 [CREATEVENTO] Enviando al admin:', eventData);
 
     this.onSave.emit(eventData);
   }
